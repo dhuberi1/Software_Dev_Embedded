@@ -14,7 +14,7 @@ class Morse
 		String textConversion(String user_input); 
 		void writeMorse(String converted_morse);
 		void sendUserMessage(String user_input);  
-	// private:
+	private:
 		int pin;
 };
 

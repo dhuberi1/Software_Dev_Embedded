@@ -1,17 +1,30 @@
 #include "Morse.h"
 
-Morse obj = Morse(5);
+// Digital Output Pin for LED
+int led_pin = 5;
+
+// Escape Character
+String sentinel = "#";
+
+Morse obj = Morse(led_pin);
 
 void setup() {
+  // Opens Serial on 9600 baud rate
   Serial.begin(9600);
-  pinMode(5, OUTPUT);
+
+  // Sets led_pin to an output
+  pinMode(led_pin, OUTPUT);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  String test_variable = Serial.readString(); 
-  // obj.dash();
-  obj.sendUserMessage(test_variable);
+
+  String test_variable;
+
+  while (test_variable.equals(sentinel))
+  {
+    test_variable = Serial.readString();
+    obj.sendUserMessage(test_variable);
   // Serial.println(obj.pin);
   // digitalWrite(5, HIGH);
+  }
 }
