@@ -6,6 +6,9 @@ int led_pin = 5;
 // Escape Character
 String sentinel = "#";
 
+// Boolean that checks if the loop has been escaped
+bool escaped = false;
+
 Morse obj = Morse(led_pin);
 
 void setup() {
@@ -18,13 +21,29 @@ void setup() {
 
 void loop() {
 
-  String test_variable;
-
-  while (test_variable.equals(sentinel))
+  while (escaped == false)
   {
+    String test_variable;
+
+    // Reads serial input as string
     test_variable = Serial.readString();
-    obj.sendUserMessage(test_variable);
-  // Serial.println(obj.pin);
-  // digitalWrite(5, HIGH);
+    test_variable.trim();
+
+    // Checks that a string was entered into the serial
+    if (test_variable.equals("") == false)
+    {
+      Serial.println(test_variable);
+      
+      // Checks if escape character is entered
+      if (test_variable.equals(sentinel) == true)
+      {
+        Serial.println("Loop Terminated!");
+        escaped = true;
+      }
+      else
+      {
+        obj.sendUserMessage(test_variable);
+      }
+    }
   }
 }
