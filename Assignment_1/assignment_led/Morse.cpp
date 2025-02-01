@@ -20,19 +20,22 @@ Morse::Morse(int pin_in) {
 String Morse::textConversion(String user_input) {
 	String converted_morse = ""; 
 	String morse_characters[] = {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--..", "-----", ".----", "..---", "...--", "....-", ".....", "-....", "--...", "---..", "----.", ".-.-.-", "--..--", "..--..", "-.-.--", "-....-", ".----.", "---...", ".-.-.", "-...-", ".-..-.", ".--.-."};
-	char alphabet[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-
-	// Using Arduino string class to convert userInput to lowercase to be mapped out
+	char alphabet[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 
+		'u', 'v', 'w', 'x', 'y', 'z', 
+		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+		'.', ',', '?', '!', '-', '\'', ':', '+', '=', '"', '@'};
+	// Using Arduino string class to convert user_input to lowercase to be mapped out
 	user_input.toLowerCase(); 
 
-	// Iterate through the userInput and convert each char to morseAlphabet 
+	// Iterate through the user_input and convert each char to morse_characters 
 	for (int i = 0; i < user_input.length(); i++) { 
 		char curr_char = user_input.charAt(i); 
 		if (curr_char == ' ') {
-			// Actually do word space 
-			converted_morse += " "; 
+			// If its a space between words, use 2 spaces to mark it actually 
+			converted_morse += "  "; 
 		} else { 
-			for (int j = 0; j < 24; j++) {
+			// Now iterate through ALL possible characters 
+			for (int j = 0; j < 46; j++) {
 				if (curr_char == alphabet[j]) {
 					// Once you get to the mapped character - break out
 					converted_morse += morse_characters[j] + " "; 
@@ -59,7 +62,14 @@ void Morse::writeMorse(String converted_morse) {
 		} else if (curr_char == '-') {
 			dash();
 		} else if (curr_char == ' ') {
-			letter_space(); 
+			// Check if its a word space or a single/letter space 
+			if (i > 0 && converted_morse.charAt(i-1) == ' ') {
+				// 
+				word_space(); 
+			} else {
+				letter_space(); 
+			}
+			
 		}
 		// Delay between the morse characters 
 		word_space();
