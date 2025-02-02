@@ -32,7 +32,7 @@ String Morse::textConversion(String user_input) {
 		char curr_char = user_input.charAt(i); 
 		if (curr_char == ' ') {
 			// If its a space between words, use 2 spaces to mark it actually 
-			converted_morse += "  "; 
+			converted_morse += "*"; 
 		} else { 
 			// Now iterate through ALL possible characters 
 			for (int j = 0; j < 46; j++) {
@@ -62,14 +62,9 @@ void Morse::writeMorse(String converted_morse) {
 		} else if (curr_char == '-') {
 			dash();
 		} else if (curr_char == ' ') {
-			// Check if its a word space or a single/letter space 
-			if (i > 0 && converted_morse.charAt(i-1) == ' ') {
-				// 
-				word_space(); 
-			} else {
-				letter_space(); 
-			}
-			
+			letter_space(); 			
+		} else if (curr_char == '*') {
+			word_space();
 		}
 		// Delay between the morse characters 
 		word_space();
