@@ -7,10 +7,9 @@ Constructor for Temp_Sense
 param : pin         Input pin
 param : v_ref_in    Refernce voltage of Arduino (V)
 */
-Temp_Sense::Temp_Sense(int pin_in, float v_ref_in, float rate_in) {
+Temp_Sense::Temp_Sense(int pin_in, float v_ref_in) {
 	pin = pin_in;
-    v_ref = v_ref_in;
-    rate = 1/rate_in;
+  v_ref = v_ref_in;
 }
 
 /*

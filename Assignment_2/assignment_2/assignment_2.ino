@@ -11,12 +11,13 @@ int temp_pin = A0;
 float v_ref = 5;
 
 // Rate of the timer interrupt (Hz)
-float rate = 0.1;
+float rate = 1;
 
-float f;
+float volatile f;
+int count = 0;
 
 // Temp_sense object
-Temp_Sense temp = Temp_Sense(temp_pin, v_ref, rate);
+Temp_Sense temp = Temp_Sense(temp_pin, v_ref);
 
 /*
 temp_timer_callback
@@ -25,7 +26,11 @@ Callback function of temp_timer.
 Runs readTemp() function.
 */
 void temp_timer_callback(timer_callback_args_t __attribute((unused)) *p_args) {
-  f = temp.readTemp();
+  count++;
+
+  if (count % 10 == 0) {
+    f = temp.readTemp();
+  }
 }
 
 /*
@@ -73,9 +78,12 @@ void setup() {
 
   // Setsup and begins timer
   beginTimer(rate);
+  
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   Serial.println(f);
+
+  delay(1000);
 }

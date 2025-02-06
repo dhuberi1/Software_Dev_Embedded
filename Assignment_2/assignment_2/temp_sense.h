@@ -10,13 +10,10 @@ class Temp_Sense
 		float mv_conv();
 		float c_conv(float mv);
 		float f_conv(float c);
-        float readTemp();
+    float readTemp();
 	private:
 		int pin;
-        float v_ref;
-        float rate;
-        float volatile v_table;
-        float volatile t_table;
+    float v_ref;
 };
 
 #endif
