@@ -78,12 +78,25 @@ void setup() {
 
   // Setsup and begins timer
   beginTimer(rate);
+
+  // Print a CSV Header 
+  Serial.println("Time in ms (ms), Temp (F)")
   
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  Serial.println(f);
+  // avoiding shared data with reading potential issues 
+  noInterrupts(); 
+  float tempCopy = f; 
+  interrupts();
 
-  delay(1000);
+  // Now we need to get associated timestamp 
+  unsigned long currentTime = millis(); 
+
+  // Print CSV formatted output to Serial for now 
+  Serial.print(currentTime); 
+  Serial.print(","); 
+  Serial.println(tempCopy); 
+  // Serial.println(f);
+  delay(1000); // wait a secnond before next read 
 }
