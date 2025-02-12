@@ -135,7 +135,6 @@ void loop() {
         Serial.println(tempF[i]);
       }
       else {
-        Serial.println("DATA SENT!");
         break;
       }
     }
