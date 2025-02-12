@@ -1,6 +1,9 @@
 import serial
 import serial.tools.list_ports
 import time
+import os 
+import matplotlib.pyplot as plt
+import pandas as pd
 
 # Set our  variables
 #SERIAL_PORT = "/dev/cu.usbmodemF412FA6E8AC02"
@@ -37,5 +40,21 @@ try:
 except KeyboardInterrupt as e: 
     print(f"\nLogging stopped. File saved - {e}")
 finally: 
-    # Close serial port 
-    ser.close() 
+    # Close serial port if its been opened 
+    if 'ser' in locals() and ser.is_open:
+        ser.close() 
+
+# Section to plot data (TODO : could make it another script that is called when this is complete?)
+if os.path.exists(FN) and os.stat(FN).st_size > 0:
+    df = pd.read_csv(FN)
+
+    if "Time (s)" in df.columns and "Temperature (F)" in df.columns:
+        plt.figure(figsize=(8, 5))
+        plt.plot(df["Time (s)"], df["Temperature (F)"], marker="o", linestyle="-", color="b")
+        plt.xlabel("Time (s)")
+        plt.ylabel("Temperature (F)")
+        plt.title("Temperature vs Time")
+        plt.grid()
+        plt.show()
+    else:
+        print("Error: CSV file format is incorrect.")

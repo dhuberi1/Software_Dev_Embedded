@@ -17,7 +17,7 @@ Temp_Sense::mv_conv
 
 Converts analog input of Arduino into milivolt reading
 
-return  :   Analog voltage of input (mV)
+return  :   float mv, Analog voltage of input (mV)
 */
 float Temp_Sense::mv_conv() {
     int a = analogRead(pin);
@@ -27,12 +27,12 @@ float Temp_Sense::mv_conv() {
 }
 
 /*
-Temp_Sense::mv_conv
+Temp_Sense::c_conv
 
-Converts voltage of input into a temperture
+Converts voltage of input into a temperature
 
-param   :   Analog voltage (mV)
-return  :   Temperture (C)
+param   :   float mv, Analog voltage (mV)
+return  :   float c, Temperature (C)
 */
 float Temp_Sense::c_conv(float mv) {
     float c = (mv - 500)/10;
@@ -43,10 +43,10 @@ float Temp_Sense::c_conv(float mv) {
 /*
 Temp_Sense::f_conv
 
-Converts temperture in Celcius into temperture in Farenheit
+Converts temperature in Celcius into temperature in Farenheit
 
-param   :   Temperture (C)
-return  :   Temperture (F)
+param   :   float c, Temperature (C)
+return  :   float f, Temperature (F)
 */
 float Temp_Sense::f_conv(float c) {
     float f = (c * 9/5.0) + 32;
@@ -57,9 +57,9 @@ float Temp_Sense::f_conv(float c) {
 /*
 Temp_Sense::readTemp
 
-Converts Converts analog input of Arduino into temperture in Farenheit
+Converts analog input of Arduino into temperature in Farenheit
 
-return  :   Temperture (F)
+return  :  float f, Temperature (F)
 */
 float Temp_Sense::readTemp() {
     float mv = mv_conv();
