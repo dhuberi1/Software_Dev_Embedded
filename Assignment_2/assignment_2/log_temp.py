@@ -22,7 +22,7 @@ try:
     # Open file to export csv
     with open(FN, "w") as file: 
         # Write header 
-        file.write("Time (s), Temperature (F)\n")
+        file.write("Time (s),Temperature (F)\n")
 
         print(f"Logging data to {FN}")
 
@@ -32,11 +32,8 @@ try:
         while True: 
             data = ser.readline().decode().strip() 
             if data: 
-                elapsed_time = round(time.time() - start_time, 2)
-                formatted_data = f"{elapsed_time}, {data}" # make sure its in csv format
-                formatted_data = data
-                print(formatted_data)
-                file.write(formatted_data + "\n")
+                print(data)
+                file.write(data + "\n")
 except KeyboardInterrupt as e: 
     print(f"\nLogging stopped. File saved - {e}")
 finally: 
