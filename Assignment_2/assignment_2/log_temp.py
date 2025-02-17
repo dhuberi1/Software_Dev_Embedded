@@ -47,7 +47,7 @@ if os.path.exists(FN) and os.stat(FN).st_size > 0:
 
     if "Time (s)" in df.columns and "Temperature (F)" in df.columns:
         plt.figure(figsize=(8, 5))
-        plt.plot(df["Time (s)"].div(10000), df["Temperature (F)"], marker="o", linestyle="-", color="b")
+        plt.plot(df["Time (s)"].div(1000), df["Temperature (F)"], marker="o", linestyle="-", color="b")
         plt.xlabel("Time (s)")
         plt.ylabel("Temperature (F)")
         plt.title("Temperature vs Time")
