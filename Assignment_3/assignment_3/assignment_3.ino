@@ -29,7 +29,7 @@ unsigned long debounceDelay = 500;
 // Storage for RPM data over time
 float rpmData[1000];  
 unsigned long timestamps[1000];  
-int index = 0;
+int count = 0;
 unsigned long lastRecordTime = 0;
 unsigned long recordInterval = 1000;  // Record an RPM every second
 
@@ -111,15 +111,15 @@ void setup() {
 }
 
 void loop() {
-
+    Serial.println(count)
     // Store current time 
     unsigned long currentMillis = millis();
 
     // Store RPM at a fixed interval - lets just say 1000 is max # of samples 
-    if (currentMillis - lastRecordTime >= recordInterval && index < 1000) {
-        rpmData[index] = getRPM();
-        timestamps[index] = currentMillis;
-        index++;
+    if (currentMillis - lastRecordTime >= recordInterval && count < 1000) {
+        rpmData[count] = getRPM();
+        timestamps[count] = currentMillis;
+        count++;
         lastRecordTime = currentMillis;
     }
 
@@ -127,7 +127,7 @@ void loop() {
     if (sendData) {
         // This will be the CSV header
         Serial.println("Timestamp, RPM"); 
-        for (int i = 0; i < index; i++) {
+        for (int i = 0; i < count; i++) {
             Serial.print(timestamps[i]);
             Serial.print(", ");
             Serial.println(rpmData[i]);
