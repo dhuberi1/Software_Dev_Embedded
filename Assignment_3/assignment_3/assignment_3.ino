@@ -1,6 +1,6 @@
 #include <Servo.h>
 #include "FspTimer.h"
-
+#include "tachmeter.h"
 
 // Timer
 FspTimer speed_timer;
@@ -31,17 +31,17 @@ int count = 0;
 int msec[1000];
 
 
-/*
-IR_detect_ISR
+// /*
+// IR_detect_ISR
 
-Records time an obstruction is detected and iterates the count.
-*/
-void IR_detect_ISR() {
-  if (count < sizeof(msec)) {
-    msec[count] = millis();
-    count++;
-  }
-}
+// Records time an obstruction is detected and iterates the count.
+// */
+// void IR_detect_ISR() {
+//   if (count < sizeof(msec)) {
+//     msec[count] = millis();
+//     count++;
+//   }
+// }
 
 /*
 speed_timer_callback
@@ -65,6 +65,8 @@ Sets sendData to true if button has been pressed. Includes debounce protection.
 void send_data_ISR() {
   if ((millis() - debounceTime) > debounceDelay) {
     sendData = true;
+    // Adding 
+    debounceTime = millis(); 
   }
 }
 
@@ -89,17 +91,18 @@ bool beginTimer(float rate) {
     return false;
   }
 
-  if (!speed_timer.setup_overflow_irq()) {
+  // Added - just combined these since they all return false 
+  if (!speed_timer.setup_overflow_irq() || !speed_timer.open() || !speed_timer.start()) {
     return false;
   }
 
-  if (!speed_timer.open()) {
-    return false;
-  }
+  // if (!speed_timer.open()) {
+  //   return false;
+  // }
 
-  if (!speed_timer.start()) {
-    return false;
-  }
+  // if (!speed_timer.start()) {
+  //   return false;
+  // }
 
   return true;
 }
@@ -124,22 +127,31 @@ void setup() {
   beginTimer(rate);
 }
 
+// void loop() {
+//   //Serial.println(count);
+
+//   // Checks if sendData flag is true
+//   if (sendData == true){
+//     // Dumps collected data over serial
+//     for (int i = 0; i < sizeof(msec); i++) {
+//       if (msec[i] != 0){
+//         Serial.println(msec[i]);
+//       }
+//       else {
+//         break;
+//       }
+//     }
+
+//     // Resets sendData flag
+//     sendData = false;
+//   }
+// }
+
 void loop() {
-  //Serial.println(count);
-
-  // Checks if sendData flag is true
-  if (sendData == true){
-    // Dumps collected data over serial
-    for (int i = 0; i < sizeof(msec); i++) {
-      if (msec[i] != 0){
-        Serial.println(msec[i]);
-      }
-      else {
-        break;
-      }
-    }
-
-    // Resets sendData flag
-    sendData = false;
-  }
+    // If button was pressed, send RPM data - now that were including header file 
+    if (sendData) {
+        Serial.print("RPM: ");
+        Serial.println(getRPM());
+        sendData = false;
+    }  
 }
