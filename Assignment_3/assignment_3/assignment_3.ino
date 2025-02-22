@@ -26,22 +26,13 @@ float rate = 20;
 unsigned long debounceTime = 0;
 unsigned long debounceDelay = 500;
 
-// Records number of times and the time when the prop blade passes between the IR sensors 
-int count = 0;
-int msec[1000];
+// Storage for RPM data over time
+float rpmData[1000];  
+unsigned long timestamps[1000];  
+int index = 0;
+unsigned long lastRecordTime = 0;
+unsigned long recordInterval = 1000;  // Record an RPM every second
 
-
-// /*
-// IR_detect_ISR
-
-// Records time an obstruction is detected and iterates the count.
-// */
-// void IR_detect_ISR() {
-//   if (count < sizeof(msec)) {
-//     msec[count] = millis();
-//     count++;
-//   }
-// }
 
 /*
 speed_timer_callback
@@ -96,14 +87,6 @@ bool beginTimer(float rate) {
     return false;
   }
 
-  // if (!speed_timer.open()) {
-  //   return false;
-  // }
-
-  // if (!speed_timer.start()) {
-  //   return false;
-  // }
-
   return true;
 }
 
@@ -127,31 +110,28 @@ void setup() {
   beginTimer(rate);
 }
 
-// void loop() {
-//   //Serial.println(count);
-
-//   // Checks if sendData flag is true
-//   if (sendData == true){
-//     // Dumps collected data over serial
-//     for (int i = 0; i < sizeof(msec); i++) {
-//       if (msec[i] != 0){
-//         Serial.println(msec[i]);
-//       }
-//       else {
-//         break;
-//       }
-//     }
-
-//     // Resets sendData flag
-//     sendData = false;
-//   }
-// }
-
 void loop() {
+
+    // Store current time 
+    unsigned long currentMillis = millis();
+
+    // Store RPM at a fixed interval - lets just say 1000 is max # of samples 
+    if (currentMillis - lastRecordTime >= recordInterval && index < 1000) {
+        rpmData[index] = getRPM();
+        timestamps[index] = currentMillis;
+        index++;
+        lastRecordTime = currentMillis;
+    }
+
     // If button was pressed, send RPM data - now that were including header file 
     if (sendData) {
-        Serial.print("RPM: ");
-        Serial.println(getRPM());
+        // This will be the CSV header
+        Serial.println("Timestamp, RPM"); 
+        for (int i = 0; i < index; i++) {
+            Serial.print(timestamps[i]);
+            Serial.print(", ");
+            Serial.println(rpmData[i]);
+        }
         sendData = false;
     }  
 }
