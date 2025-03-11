@@ -1,9 +1,9 @@
 #include <ESP8266WiFi.h>
 // Replace these with your WiFi network settings
-const char* ssid = "WIFI"; //replace this with your WiFi network name
-const char* password = "PASSWORD"; //replace this with your WiFi network password
+const char* ssid = "wifi"; //replace this with your WiFi network name
+const char* password = "password"; //replace this with your WiFi network password
 
-const char* host = "web.simmons.edu";
+const char* host = "api.openweathermap.org";
 
 void setup() {
   // From "ESP8266 Wi-Fi tutorial and examples using the Arduino IDE.docx" on Canvas
@@ -39,7 +39,12 @@ void loop() {
   }
 
   // Create URI for the request
-  String url = "/~grovesd/comm244/notes/week2/links";
+  String url = "/data/2.5/weather?lat=";
+  String lat = "38.8536";
+  String lon = "-77.2531";
+  String apikey = "cea27c2467ab3cb397c3c49c8bfdadc6";
+
+  url = url + lat + "&lon=" + lon + "&appid=" + apikey;
 
   Serial.print("Requesting URL: ");
   Serial.print(url);
