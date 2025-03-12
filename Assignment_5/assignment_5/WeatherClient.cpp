@@ -46,12 +46,11 @@ String parseJson(String payload) {
     float temperature = float(doc["main"]["temp"]) - 273.15;
     int humidity = int(doc["main"]["humidity"]);
 
-    // For now just return 
+    // Build the weather information string
     String weatherInfo = "Temp: ";
     weatherInfo += String(temperature, 2);
     weatherInfo += ", Humidity: ";
     weatherInfo += String(humidity);
 
     return weatherInfo;
-
 }
