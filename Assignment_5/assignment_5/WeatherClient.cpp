@@ -1,32 +1,41 @@
 #include "WeatherClient.h"
-#include <ESP8266HTTPClient.h>
-#include <ArduinoJson.h> 
+#include <ESP8266WiFi.h>
+#include <ArduinoJson.h>
 
 String fetchWeatherData() {
-    // Create URI for the request
-    HTTPClient http; 
+    WiFiClient client; 
     String host = "api.openweathermap.org";
     String lat = "38.8536";
     String lon = "-77.2531";
     String apikey = "cea27c2467ab3cb397c3c49c8bfdadc6";
-    String url = "http://" + host + "/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apikey;
+    String url = "/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apikey;
 
-    http.begin(url); 
-    // Send actual GET request 
-    int httpCode = http.GET(); 
+    // Connect to OpenWeatherMap server with standard client.connect()
+    if (client.connect(host.c_str(), 80)) {
+        // ACtual HTTP GET request
+        client.println("GET " + url + " HTTP/1.1");
+        client.println("Host: " + host);
+        client.println("Connection: close");
+        client.println();
 
-    if (httpCode > 0) { 
-        // Success 
-        String payload = http.getString(); 
-        Serial.println("HTTP Response success");
+        while (!client.available()) {
+            delay(10);
+        }
 
-        // parse JSON 
-        return parseJson(payload); 
+        // Read now response (HTTP response is be split into header/body)
+        String response = "";
+        while (client.available()) {
+            response += client.readString();
+        }
 
+        client.stop();  // Close the connection
+
+        // Parse the response to extract weather data
+        return parseJson(response);
     } else {
-        Serial.print("Error when doing the HTTP request iwth error code: ");
-        Serial.println(httpCode);
-        return "HTTP Request Failed 404";
+        // If connection fails
+        Serial.println("Connection to server failed");
+        return "Connection failed";
     }
 }
 
@@ -40,18 +49,17 @@ String parseJson(String payload) {
         Serial.print("Deserialization failed ): ");
         Serial.println(error.c_str()); 
         return ""; 
-    } 
-    
-    // we want temp and humidity (i got it in Kelvin??)
+    }
+
+    // Extract temperature and humidity
     float temperature = doc["main"]["temp"] - 273.15;
     int humidity = doc["main"]["humidity"];
 
-    // For now just return 
+    // Build the weather information string
     String weatherInfo = "Temp: ";
     weatherInfo += String(temperature, 2);
     weatherInfo += ", Humidity: ";
     weatherInfo += String(humidity);
 
     return weatherInfo;
-
 }
