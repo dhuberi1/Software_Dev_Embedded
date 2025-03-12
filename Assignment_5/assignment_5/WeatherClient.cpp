@@ -43,8 +43,8 @@ String parseJson(String payload) {
     } 
     
     // we want temp and humidity (i got it in Kelvin??)
-    float temperature = doc["main"]["temp"] - 273.15;
-    int humidity = doc["main"]["humidity"];
+    float temperature = float(doc["main"]["temp"]) - 273.15;
+    int humidity = int(doc["main"]["humidity"]);
 
     // For now just return 
     String weatherInfo = "Temp: ";
