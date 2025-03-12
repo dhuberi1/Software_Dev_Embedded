@@ -2,6 +2,6 @@
 #define WIFI_MANAGER_H 
 
 // Function protoype 
-void connectToWifi();
+void connectToWiFi();
 
-#endif WIFI_MANAGER_H 
+#endif  

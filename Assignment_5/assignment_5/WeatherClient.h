@@ -6,4 +6,4 @@
 String fetchWeatherData();
 String parseJson(String payload);
 
-#endif WEATHER_CLIENT_H
+#endif

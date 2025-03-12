@@ -18,15 +18,15 @@ String fetchWeatherData() {
     if (httpCode > 0) { 
         // Success 
         String payload = http.getString(); 
-        String.println("HTTP Response: " + String(httpCode));
+        Serial.println("HTTP Response success");
 
         // parse JSON 
         return parseJson(payload); 
-        
+
     } else {
         Serial.print("Error when doing the HTTP request iwth error code: ");
         Serial.println(httpCode);
-        return "";
+        return "HTTP Request Failed 404";
     }
 }
 
@@ -47,7 +47,10 @@ String parseJson(String payload) {
     int humidity = doc["main"]["humidity"];
 
     // For now just return 
-    String weatherInfo = "Temp: " + temperature + "," + "Humidity: " + humidity; 
+    String weatherInfo = "Temp: ";
+    weatherInfo += String(temperature, 2);
+    weatherInfo += ", Humidity: ";
+    weatherInfo += String(humidity);
 
     return weatherInfo;
 

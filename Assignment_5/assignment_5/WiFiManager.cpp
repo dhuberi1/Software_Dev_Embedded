@@ -4,7 +4,7 @@
 const String ssid = "wifi"; //replace this with your WiFi network name
 const String password = "password"; //replace this with your WiFi network password
 
-void connectToWifi() {
+void connectToWiFi() {
     WiFi.begin(ssid.c_str(), password.c_str());
     Serial.println("Connecting to my Wifi: ");
 
@@ -23,6 +23,6 @@ void connectToWifi() {
     // Once broken out of while loop, we are connected 
     Serial.print("\nConnected to Wifi"); 
     Serial.print("IP Address: ");
-    Serial.print(WiFi.localIP().toString()); 
+    Serial.println(WiFi.localIP()); 
 
 }
