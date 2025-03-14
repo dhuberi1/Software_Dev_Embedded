@@ -9,7 +9,7 @@ String fetchWeatherData() {
     String lat = "38.8536";
     String lon = "-77.2531";
     String apikey = "cea27c2467ab3cb397c3c49c8bfdadc6";
-    String url = "http://" + host + "/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apikey;
+    String url = "http://" + host + "/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apikey + "&units=imperial";
 
     http.begin(url); 
     // Send actual GET request 
@@ -43,13 +43,13 @@ String parseJson(String payload) {
     } 
     
     // we want temp and humidity (i got it in Kelvin??)
-    float temperature = float(doc["main"]["temp"]) - 273.15;
+    float temperature = float(doc["main"]["temp"]);
     int humidity = int(doc["main"]["humidity"]);
 
     // Build the weather information string
     String weatherInfo = "Temp: ";
     weatherInfo += String(temperature, 2);
-    weatherInfo += ", Humidity: ";
+    weatherInfo += " °F, Humidity: ";
     weatherInfo += String(humidity);
 
     return weatherInfo;
