@@ -49,7 +49,7 @@ String parseJson(String payload) {
     // Build the weather information string
     String weatherInfo = "Temp: ";
     weatherInfo += String(temperature, 2);
-    weatherInfo += " °F, Humidity: ";
+    weatherInfo += " F, Humidity: ";
     weatherInfo += String(humidity);
 
     return weatherInfo;

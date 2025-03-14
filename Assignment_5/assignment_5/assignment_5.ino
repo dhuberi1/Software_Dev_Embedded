@@ -34,7 +34,6 @@ void queryWeather()
 }
 
 void setup() {
-  // From "ESP8266 Wi-Fi tutorial and examples using the Arduino IDE.docx" on Canvas
   Serial.begin(115200);
 
   // Connect to Wifi 
@@ -52,7 +51,7 @@ void setup() {
 
 void loop() {
 
-  //
+  // Chekcs for clients and sends HTTP data
   hostWebServer();
   
   // if checkWeather flag is true and if it is, queries OpenWeatherMap API
