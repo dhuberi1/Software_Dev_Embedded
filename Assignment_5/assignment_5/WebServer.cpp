@@ -1,5 +1,5 @@
 #include "WebServer.h"
-
+#include "WeatherClient.h"
 #include <ESP8266WiFi.h>
 
 // Set webserver port to 80
@@ -55,6 +55,9 @@ void hostWebServer() {
             // that's the end of the client HTTP request, so send a response:
             if (currentLine.length() == 0) {
 
+              // Actually get the weather data 
+              String weatherData = fetchWeatherData();
+
               // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
               // and a content-type so the client knows what's coming, then a blank line:
               client.println("HTTP/1.1 200 OK");
@@ -67,16 +70,11 @@ void hostWebServer() {
               client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
               client.println("<link rel=\"icon\" href=\"data:,\">");
 
-              // CSS to style the on/off buttons 
-              // Feel free to change the background-color and font-size attributes to fit your preferences
               client.println("<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}");
-              client.println(".button { background-color: #195B6A; border: none; color: white; padding: 16px 40px;");
-              client.println("text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}");
-              client.println(".button2 {background-color: #77878A;}</style></head>");
-              
-              // Web Page Heading
+              // Put the weather data on the html page 
               client.println("<body><h1>ESP8266 Web Server</h1>");
-              
+              client.println("<h2>Current Weather: </h2>");
+              client.println("<p>" + weatherData + "</p>");
               client.println("</body></html>");
               
               // The HTTP response ends with another blank line
