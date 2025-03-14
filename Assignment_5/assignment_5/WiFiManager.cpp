@@ -1,8 +1,8 @@
 #include "WiFiManager.h"
 #include <ESP8266WiFi.h>
 
-const String ssid = "WIFI"; //replace this with your WiFi network name
-const String password = "PASSWORD"; //replace this with your WiFi network password
+const String ssid = "FiOS-GMAL3"; //replace this with your WiFi network name
+const String password = "chili62bear5020hex"; //replace this with your WiFi network password
 
 void connectToWiFi() {
     WiFi.begin(ssid.c_str(), password.c_str());

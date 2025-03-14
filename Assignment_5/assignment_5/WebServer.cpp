@@ -70,7 +70,7 @@ void hostWebServer() {
               client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
               client.println("<link rel=\"icon\" href=\"data:,\">");
 
-              client.println("<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}");
+              client.println("<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}</style></head>");
               // Put the weather data on the html page 
               client.println("<body><h1>ESP8266 Web Server</h1>");
               client.println("<h2>Current Weather: </h2>");
@@ -97,7 +97,7 @@ void hostWebServer() {
       }
       // Clear the header variable
       header = "";
-      
+
       // Close the connection
       client.stop();
       Serial.println("Client disconnected.");
