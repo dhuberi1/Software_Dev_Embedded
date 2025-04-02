@@ -15,5 +15,6 @@ while True:
         print("Lat:", packet.lat, " Lon:", packet.lon, " Alt:", packet.alt)
     except KeyboardInterrupt as e: 
         print("Exiting...")
+        break
     except:
         pass
