@@ -13,5 +13,7 @@ while True:
         packet = gpsd.get_current()
         #print(packet.position())
         print("Lat:", packet.lat, " Lon:", packet.lon, " Alt:", packet.alt)
+    except KeyboardInterrupt as e: 
+        print("Exiting...")
     except:
         pass
