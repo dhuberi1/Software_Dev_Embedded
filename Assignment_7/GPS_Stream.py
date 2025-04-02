@@ -2,7 +2,7 @@
 
 import gpsd
 
-IP = "192.168.1.28" # Replace with the IP of the Raspberry Pi
+IP = "172.20.10.3" # Replace with the IP of the Raspberry Pi
 PORT = 2947 # Replace with the desired port
 
 gpsd.connect(host=IP, port=PORT)
