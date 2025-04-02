@@ -9,6 +9,9 @@ gpsd.connect(host=IP, port=PORT)
 
 # Get GPS position and altitude
 while True:
-    packet = gpsd.get_current()
-    #print(packet.position())
-    print("Lat:", packet.lat, " Lon:", packet.lon, " Alt:", packet.alt)
+    try:
+        packet = gpsd.get_current()
+        #print(packet.position())
+        print("Lat:", packet.lat, " Lon:", packet.lon, " Alt:", packet.alt)
+    except:
+        pass
