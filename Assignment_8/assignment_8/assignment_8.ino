@@ -1,9 +1,18 @@
 #include <Arduino_FreeRTOS.h>
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BNO055.h>
+#include <utility/imumaths.h>
 
 // Global Variables
 volatile float roll = 0;
 volatile float pitch = 0;
 volatile float yaw = 0;
+
+/* Set the delay between fresh samples */
+#define BNO055_SAMPLERATE_DELAY_MS (100)
+
+Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 
 //Tasks
 TaskHandle_t loop_task;
@@ -18,6 +27,17 @@ void setup() {
   while (!Serial) {
 
   }
+
+  // Initialise the IMU sensor
+  // From: https://github.com/adafruit/Adafruit_BNO055/blob/master/examples/sensorapi/sensorapi.ino
+  if(!bno.begin())
+  {
+    /* There was a problem detecting the BNO055 ... check your connections */
+    Serial.print("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
+    while(1);
+  }
+
+  bno.setExtCrystalUse(true);
 
   // Creates loop task
   // From: https://github.com/arduino/ArduinoCore-renesas/blob/main/libraries/Arduino_FreeRTOS/examples/FreeRTOS-Blink/FreeRTOS-Blink.ino
@@ -86,7 +106,7 @@ void loop_thread_func(void *pvParameters)
 }
 
 void loop() {
-  Serial.println(millis());
+  //Serial.println(millis());
   vTaskDelay(configTICK_RATE_HZ/4);
 }
 
@@ -95,9 +115,13 @@ void imu_read_thread_func(void *pvParameters)
 {
   for(;;)
   {
-    roll += 1;
-    pitch += 2;
-    yaw += 3;
+    // Gets new sensor events
+    sensors_event_t event;
+    bno.getEvent(&event);
+
+    roll = event.orientation.x;
+    pitch = event.orientation.y;
+    yaw = event.orientation.z;
 
     vTaskDelay(configTICK_RATE_HZ);
   }
