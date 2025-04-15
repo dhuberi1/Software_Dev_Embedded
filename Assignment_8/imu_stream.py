@@ -12,7 +12,7 @@ while True:
     try:
         data, addr = imu_socket.recvfrom(1024) # buffer size is 1024 bytes
         data = data.decode()
-        print("received message: %s" % data)
+        print(data)
 
     except KeyboardInterrupt as e: 
         print("Exiting...")
