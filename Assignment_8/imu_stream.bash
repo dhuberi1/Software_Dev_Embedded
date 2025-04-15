@@ -1,2 +1,2 @@
 #!/bin/sh
-python3 imu_stream.bash
+python3 ~/Documents/code/log_imu.py
