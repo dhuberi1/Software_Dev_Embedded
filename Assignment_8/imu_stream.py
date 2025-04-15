@@ -2,7 +2,7 @@
 import socket
 
 ### UDP Socket ###
-UDP_IP = "192.168.1.229" # IP ADDRESS OF HOST DEVICE
+UDP_IP = "172.20.10.2" # IP ADDRESS OF HOST DEVICE
 UDP_PORT = 9001
 
 imu_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
