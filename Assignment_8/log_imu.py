@@ -47,24 +47,16 @@ def main():
     ser = init_serial(SERIAL_PORT, BAUD_RATE, 1)
     udp_sock = init_udp_socket()
 
-    try:
-        while True:
+    while True:
+        try:
             if ser.in_waiting > 0:
                 data = ser.readline().decode('utf-8', errors='ignore').strip()
                 if data:
                     print(f"Sending: {data}")
                     udp_sock.sendto(data.encode('utf-8'), (UDP_IP, UDP_PORT))
 
-    except KeyboardInterrupt:
-        print("\nInterrupted by user. Exiting...")
-
-    except Exception as e:
-        print(f"Unexpected error: {e}")
-
-    finally:
-        print("Closing connections...")
-        ser.close()
-        udp_sock.close()
+        except Exception as e:
+            print(f"Unexpected error: {e}")
 
 if __name__ == "__main__":
     main()
