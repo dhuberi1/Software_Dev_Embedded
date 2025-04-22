@@ -2,31 +2,32 @@
 
 import socket
 
-### Arduino Serial ###
-SERIAL_PORT = "COM4"
-BAUD_RATE = 115200
-BT_ADDR = "3C:95:09:9A:00:B2"
+### Bluetooth ###
+#BT_ADDR = "3C:95:09:9A:00:B2" # Host
+BT_ADDR = "D8:3A:DD:EE:EE:E2" # RPi
+BT_PORT = 8 # Arbitrary non-reserved port
 
 def main():
-    ser = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-    port = 8  # Arbitrary non-reserved port
-    ser.bind((BT_ADDR, port))
-    data = ""
+    connected = False
 
     while True:
-        if data == "":
-            # Listen for incoming connections
-            ser.listen(1)
+        while connected == False:
+            try:
+                bt_sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+                bt_sock.connect((BT_ADDR, BT_PORT))
+                connected = True
+                print("Connected!")
 
-            # Accept a connection
-            client_socket, address = ser.accept()
-            print(f"Accepted connection from {address}")
-        
-        data = client_socket.recv(1024)
+            except Exception as e:
+                print(e)
+                
+        data = bt_sock.recv(1024)
         data = data.decode()
 
         if data != "":
             print(f"Received: {data}")
+        else:
+            connected = False
 
 if __name__ == "__main__":
     main()
