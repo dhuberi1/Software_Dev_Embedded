@@ -24,7 +24,9 @@ def main():
         
         data = client_socket.recv(1024)
         data = data.decode()
-        print(f"Received: {data}")
+
+        if data != "":
+            print(f"Received: {data}")
 
 if __name__ == "__main__":
     main()
