@@ -11,17 +11,20 @@ def main():
     ser = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
     port = 8  # Arbitrary non-reserved port
     ser.bind((BT_ADDR, port))
-
-    # Listen for incoming connections
-    ser.listen(1)
-
-    # Accept a connection
-    client_socket, address = ser.accept()
-    print(f"Accepted connection from {address}")
+    data = ""
 
     while True:
+        if data == "":
+            # Listen for incoming connections
+            ser.listen(1)
+
+            # Accept a connection
+            client_socket, address = ser.accept()
+            print(f"Accepted connection from {address}")
+        
         data = client_socket.recv(1024)
-        print(f"Received: {data.decode()}")
+        data = data.decode()
+        print(f"Received: {data}")
 
 if __name__ == "__main__":
     main()
