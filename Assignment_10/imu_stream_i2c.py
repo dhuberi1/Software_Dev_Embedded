@@ -16,6 +16,7 @@ SCL = 11
 I2C_ADDR = 9
 pi = pigpio.pi()
 data = ""
+udp_sock = ""
 
 # Function to connect to udp 
 def init_udp_socket() -> socket.socket:
@@ -30,13 +31,13 @@ def init_udp_socket() -> socket.socket:
 # from https://abyz.me.uk/rpi/pigpio/code/bsc_arduino_py.zip
 def i2c(id, tick):
     global pi
-    global data
+    global udp_sock
+    
     s, b, d = pi.bsc_i2c(I2C_ADDR)
 
     if b:
-
-        print(d[:-1])
-        data = d[:-1]
+        print(f"Sending: {d[:-1]}")
+        udp_sock.sendto(d[:-1], (UDP_IP, UDP_PORT))
 
 def init_i2c():
     if not pi.connected:
@@ -56,6 +57,7 @@ def init_i2c():
 
 def main():
     global data
+    global udp_sock
     
     udp_sock = init_udp_socket()
     init_i2c()
@@ -63,8 +65,7 @@ def main():
     while True:
         try:
             if data != "":
-                print(f"Sending: {data}")
-                udp_sock.sendto(data, (UDP_IP, UDP_PORT))
+                pass
 
         except Exception as e:
             print(f"Unexpected error: {e}")
