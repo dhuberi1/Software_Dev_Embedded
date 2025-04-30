@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import time
+import struct
 import socket
 import sys
 import pigpio
@@ -36,8 +36,16 @@ def i2c(id, tick):
     s, b, d = pi.bsc_i2c(I2C_ADDR)
 
     if b:
-        print(f"Sending: {d[:-1]}")
-        udp_sock.sendto(d[:-1], (UDP_IP, UDP_PORT))
+        r = get_float(d, 0)
+        p = get_float(d, 1)
+        y = get_float(d, 2)
+
+        send = "Roll: " + str(r) + " Pitch: " + str(p) + " Yaw: " + str(y)
+        try:
+            print(f"Sending: {send}")
+            udp_sock.sendto(send.encode('utf-8'), (UDP_IP, UDP_PORT))
+        except:
+            pass
 
 def init_i2c():
     if not pi.connected:
@@ -54,6 +62,10 @@ def init_i2c():
     pi.bsc_i2c(I2C_ADDR) # Configure BSC as I2C slave
 
     print("I2C device connected")
+
+def get_float(data, index):
+    bytes = data[4*index:(index+1)*4]
+    return struct.unpack('f', bytes)[0]
 
 def main():
     global data

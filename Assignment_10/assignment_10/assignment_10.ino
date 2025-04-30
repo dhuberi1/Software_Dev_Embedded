@@ -10,7 +10,12 @@ IMUHandler imuHandler;
 
 // Task handles 
 TaskHandle_t imu_read_task;
-TaskHandle_t serial_out_task;
+TaskHandle_t i2c_out_task;
+
+// Global Variables
+float roll = 0;
+float pitch = 0;
+float yaw = 0;
 
 void setup() {
   // Opens serial on 115200 baud rate 
@@ -34,9 +39,9 @@ void setup() {
     return;
   }
 
-  // Create serial_out task
-  if (xTaskCreate(serial_out_thread_func, static_cast<const char*>("Serial Out Thread"),512 / 4, nullptr, 1, &serial_out_task) != pdPASS) {
-    Serial.println("Failed to create 'serial_out' thread");
+  // Create i2c_out task
+  if (xTaskCreate(i2c_out_thread_func, static_cast<const char*>("Serial Out Thread"),512 / 4, nullptr, 1, &i2c_out_task) != pdPASS) {
+    Serial.println("Failed to create 'i2c_out' thread");
     return;    
   }
 
@@ -61,16 +66,19 @@ void imu_read_thread_func(void *pvParameters) {
   }
 }
 
-void serial_out_thread_func(void *pvParameters)
+void i2c_out_thread_func(void *pvParameters)
 {
   for(;;)
   {
-    char str[50];
+    roll = imuHandler.getRoll();
+    pitch = imuHandler.getPitch();
+    yaw = imuHandler.getYaw();
 
-    sprintf(str, "Roll: %7d, Pitch: %7d, Yaw: %7d", imuHandler.getRoll(), imuHandler.getPitch(), imuHandler.getYaw());
 
     Wire.beginTransmission(9); // transmit to device #9
-    Wire.write(str);
+    Wire.write((byte*) &roll, sizeof(float));
+    Wire.write((byte*) &pitch, sizeof(float));
+    Wire.write((byte*) &yaw, 3*sizeof(float));
     Wire.endTransmission();    // stop transmitting
 
     vTaskDelay(configTICK_RATE_HZ);
