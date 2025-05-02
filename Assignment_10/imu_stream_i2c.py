@@ -64,8 +64,13 @@ def init_i2c():
     print("I2C device connected")
 
 def get_float(data, index):
-    bytes = data[4*index:(index+1)*4]
-    return struct.unpack('f', bytes)[0]
+    try:
+        bytes = data[4*index:(index+1)*4]
+        return struct.unpack('f', bytes)[0]
+    
+    except Exception as e:
+        print(e)
+        return 0
 
 def main():
     global data

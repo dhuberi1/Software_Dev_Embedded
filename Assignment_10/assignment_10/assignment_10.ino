@@ -13,6 +13,7 @@ TaskHandle_t imu_read_task;
 TaskHandle_t i2c_out_task;
 
 // Global Variables
+float data[3];
 float roll = 0;
 float pitch = 0;
 float yaw = 0;
@@ -74,11 +75,14 @@ void i2c_out_thread_func(void *pvParameters)
     pitch = imuHandler.getPitch();
     yaw = imuHandler.getYaw();
 
+    Serial.println(roll);
+    Serial.println(pitch);
+    Serial.println(yaw);
 
     Wire.beginTransmission(9); // transmit to device #9
     Wire.write((byte*) &roll, sizeof(float));
     Wire.write((byte*) &pitch, sizeof(float));
-    Wire.write((byte*) &yaw, 3*sizeof(float));
+    Wire.write((byte*) &yaw, sizeof(float));
     Wire.endTransmission();    // stop transmitting
 
     vTaskDelay(configTICK_RATE_HZ);
